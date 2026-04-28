@@ -655,7 +655,7 @@ class Screens():
        
         #statistical analysis
         tk.Button(grid_frame, text= "Moving averages",command=self.execute_moving_averages).grid(row=3,column = 0,sticky="nsew") #creates a button that is in the grid frame in the fourth row first column that calls the execute_moving_averages function
-        tk.Button(grid_frame, text= "Rolling averages",command=self.execute_rolling_averages).grid(row=3,column = 1,sticky="nsew")#creates a button that is in the grid frame in the fourth row second column that calls the execute_rolling_averages function
+        tk.Button(grid_frame, text= "Rolling averages of Returns",command=self.execute_rolling_averages).grid(row=3,column = 1,sticky="nsew")#creates a button that is in the grid frame in the fourth row second column that calls the execute_rolling_averages function
         tk.Button(grid_frame, text= "Get Max Drawdown",command=self.execute_get_max_drawdown).grid(row=3,column = 2,sticky="nsew")#creates a button that is in the grid frame in the fourth row third column that calls the execute_get_max_drawdown function
         tk.Button(grid_frame, text= "Get Volatility",command=self.execute_get_volatity).grid(row=4,column = 1,sticky="nsew")#creates a button that is in the grid frame in the fifth row first column that calls the execute_get_volatity function
 
