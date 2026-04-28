@@ -5,6 +5,7 @@ For our project, we decided to create an interface where a user can insert a tic
 
 
 Program Instructions 
+
 First, open the python file in VS Code and enter the following pip command in a terminal to install the correct libraires/packages needed for our program to operate
 
 Pip Commands:
