@@ -5,7 +5,9 @@ import pandas as pd                         #Use 'pip install pandas' to install
 import matplotlib.pyplot as plt             #Use 'python -m pip install -U matplotlib' to install the matplot library
 import statistics
 from scipy.stats import t as t_dist         #Use 'pip install scipy' to install the scipy library
-
+import tkinter as tk                        #imports the built in interface software
+from tkinter import messagebox, simpledialog #imports two options from the tkinter inface for messageboxes and simple popups
+from tkinter import scrolledtext            #imports the scrolled text option so that popups with a lot of text can be scrollable
 
 class Node: #Defines a node class
     def __init__(self, key, value, color='RED'):
@@ -348,12 +350,12 @@ class Stock(RBT): #Defines a Stock class. The Stock class is a child class of th
     def get_highest_price(self):
         highest_price = super().getMax() #Calls the getMax() from the parent class to get the maximum price of the stock that is stored in the RBT
         dates = super().search_value(highest_price) #Calls the search_value() method from the parent class to get the date at which the maximum price of the stock occured on
-        return((dates, highest_price)) #Returns a tuple containing the date at which the maximum price ocurred, and the maximum price itself
+        return((highest_price, dates)) #Returns a tuple containing the date at which the maximum price ocurred, and the maximum price itself
    
     def get_lowest_price(self):
         lowest_price = super().getMin() #Calls the getMin() from the parent class to get the minimum price of the stock that is stored in the RBT
         dates = super().search_value(lowest_price) #Calls the search_value() method from the parent class to get the date at which the minimum price of the stock occured on
-        return((dates, lowest_price)) #Returns a tuple containing the date at which the minimum price ocurred, and the minimum price itself
+        return((lowest_price, dates)) #Returns a tuple containing the date at which the minimum price ocurred, and the minimum price itself
    
     def get_price_range(self, start_date, end_date):
         if super().validate_key(start_date) == False: #Calls the validate_key() method from the RBT parent class to enusre that the start date is the correct format of YYYY-MM-DD
@@ -523,14 +525,13 @@ class Stock(RBT): #Defines a Stock class. The Stock class is a child class of th
                 return(f'The two stocks do not differ significantly at the 5% level\nMean-1: {mean1}\nMean-2: {mean2}\nt-statistic: {t_stat}\np-value: {p_value}') #Returns a formatted message indicating that the statistical test did NOT find a significant difference between the two stocks at the 5% level. Also, includes the means, t-statistic, and p-value for clarity.
         return('Statistics are not comparable') #If StatOne and StatTwo are not list containg statistical information, then a string is returned to the user telling them that these two statistics are not comparable.
 
-import tkinter as tk #imports the built in interface software
-from tkinter import messagebox, simpledialog #imports two options from the tkinter inface for messageboxes and simple popups
-from tkinter import scrolledtext #imports the scrolled text option so that popups with a lot of text can be scrollable
+
 class Screens():
     def __init__(self, root):
         self.root = root
         self.root.title("Welcome to Stock Comparisons") #creates the title "Welcome to Stock Comparisons"
         self.root.geometry("500x500") # creates the size of the popup window
+        self.root.resizable(False, False) #Prevents the window from being re-sized
 
         self.active_stock = None #initializes stock
 
@@ -630,12 +631,12 @@ class Screens():
         tk.Label(date_frame, text="Start:").grid(row=0, column=0) # creates an input box for the start date the user wants to search for
         self.start_entry = tk.Entry(date_frame) # sets start entry to the date inputted
         self.start_entry.grid(row=0, column=1) #intializes where the input box will be shown
-        self.start_entry.insert(0, "2024-01-01") #intializes a given date if the user doesnt input one (just a random date that should be in the range of any stock inputted)
+        self.start_entry.insert(0, self.active_stock._get_first_day_of_trading()) #intializes a given date if the user doesnt input one (just a random date that should be in the range of any stock inputted)
 
         tk.Label(date_frame, text="End:").grid(row=1, column=0) # creates an input box for the end date the user wants to search for
         self.end_entry = tk.Entry(date_frame) # sets end entry to the date inputted
         self.end_entry.grid(row=1, column=1)  #intializes where the input box will be shown
-        self.end_entry.insert(0, (date.today() - timedelta(days=2)).isoformat())  #intializes a given date if the user doesnt input one (is set to be two days before the current date because the webscapping is up to current date completely)
+        self.end_entry.insert(0, (date.today() - timedelta(days=3)).isoformat())  #intializes a given date if the user doesnt input one (is set to be two days before the current date because the webscapping is up to current date completely)
 
 
         # Buttons
@@ -745,7 +746,7 @@ class Screens():
         if result and result[0] != float('-inf'): #checks that result is not empty and also that its first element is not negative infinity.
             price, dates = result # this unpacks the data in results and splits it into two seperate variables price and date
        
-            date_str = ", ".join(dates)# Format the dates into a string and if there are many dates, we join them with commas.
+            date_str = ", ".join(dates) # Format the dates into a string and if there are many dates, we join them with commas.
        
             message = (f"The all-time lowest adjusted close for " f"{self.active_stock.ticker_symbol} is:\n\n" f"${price:.2f}\n\n" f"Occurred on: {date_str}") #creates the message for the pop up that shows text with the inputted ticker symbol as well as the lowest price and the day it occured on
        
